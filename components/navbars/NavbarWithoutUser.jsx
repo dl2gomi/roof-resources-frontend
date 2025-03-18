@@ -40,9 +40,14 @@ const NavbarWithoutUser = () => {
               Branches
             </div>
           </Link>
+          <Link href="/users">
+            <div className="[font-family:'Open_Sans',sans-serif] text-sm font-bold tracking-[0.75px] leading-4 uppercase text-[#1e3c55] m-0 p-0">
+              Users
+            </div>
+          </Link>
         </div>
 
-        <div className="hidden md:flex space-x-4">{''}</div>
+        <div className="hidden md:flex space-x-4 w-[84px]">{''}</div>
 
         {/* Mobile Menu Button */}
         <button onClick={toggleMenu} className="md:hidden text-white focus:outline-none pe-8">
@@ -58,6 +63,11 @@ const NavbarWithoutUser = () => {
           </div>
           <div className="flex justify-center items-center h-screen inset-0">
             <div>
+              <Link href="/">
+                <div className="[font-family:'Open_Sans',sans-serif] text-lg font-bold tracking-[0.75px] leading-4 uppercase text-[#1e3c55] my-6">
+                  Home
+                </div>
+              </Link>
               <Link href="/proposals">
                 <div className="[font-family:'Open_Sans',sans-serif] text-lg font-bold tracking-[0.75px] leading-4 uppercase text-[#1e3c55] my-6">
                   Proposals
@@ -71,6 +81,16 @@ const NavbarWithoutUser = () => {
               <Link href="/branches">
                 <div className="[font-family:'Open_Sans',sans-serif] text-lg font-bold tracking-[0.75px] leading-4 uppercase text-[#1e3c55] my-6">
                   Branches
+                </div>
+              </Link>
+              <Link href="/users">
+                <div className="[font-family:'Open_Sans',sans-serif] text-lg font-bold tracking-[0.75px] leading-4 uppercase text-[#1e3c55] my-6">
+                  Users
+                </div>
+              </Link>
+              <Link href="/account">
+                <div className="[font-family:'Open_Sans',sans-serif] text-lg font-bold tracking-[0.75px] leading-4 uppercase text-[#1e3c55] my-6">
+                  Account
                 </div>
               </Link>
             </div>

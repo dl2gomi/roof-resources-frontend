@@ -6,8 +6,23 @@ import { IconInput, Pagination } from '../widgets';
 import searchIcon from '@/public/icons/icon-search.png';
 import plusIcon from '@/public/icons/icon-plus.png';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
-function CustomTable({ name, data, col1Name, col1, col2Name, col2, col3Name, col3, sorts, addButton = false }) {
+function CustomTable({
+  name,
+  data,
+  col1Name,
+  col1,
+  col2Name,
+  col2,
+  col3Name,
+  col3,
+  sorts,
+  addButton = false,
+  addUrl = undefined,
+}) {
+  const router = useRouter();
+
   useEffect(() => {
     data && console.log(data);
   }, [data]);
@@ -15,19 +30,19 @@ function CustomTable({ name, data, col1Name, col1, col2Name, col2, col3Name, col
   return (
     <>
       <div className="mx-8 grid grid-cols-24 text-black items-center py-8 gap-2">
-        <div className="col-span-24 md:col-span-13 uppercase text-lg text-center md:text-start pb-2 font-bold text-[#1E3C55]">
+        <div className="col-span-24 md:col-span-13 uppercase text-lg text-center md:text-start py-2 font-bold text-[#1E3C55]">
           <div className="flex justify-between items-center">
             <span>{name}</span>
             <div>
-              {addButton && (
-                <button className="bg-[#1E3C55] p-[6px] rounded cursor-pointer">
+              {addButton && addUrl && (
+                <button className="bg-[#1E3C55] p-[9px] rounded cursor-pointer" onClick={() => router.push(addUrl)}>
                   <Image src={plusIcon} alt="Plus Icon" height={25} />
                 </button>
               )}
             </div>
           </div>
         </div>
-        <div className="col-span-24 md:col-span-6 uppercase text-xs pb-2">
+        <div className="col-span-24 md:col-span-6 uppercase text-xs md:pt-1 pb-1">
           <IconInput
             icon={searchIcon}
             placeholder="Search"
@@ -37,7 +52,7 @@ function CustomTable({ name, data, col1Name, col1, col2Name, col2, col3Name, col
             background="#F9FBFF"
           />
         </div>
-        <div className="col-span-24 md:col-span-5 text-xs md:text-end pb-2">
+        <div className="col-span-24 md:col-span-5 text-xs md:text-end md:pt-1 pb-1">
           <div
             className={`rounded box-border flex justify-start items-center flex-row w-full h-[45px] px-4`}
             style={{ backgroundColor: '#F9FBFF' }}
