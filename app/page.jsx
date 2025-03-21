@@ -1,8 +1,49 @@
-import Image from 'next/image';
-import '@/styles/all.css';
-import logo from '@/public/img/logo.png';
+'use client';
 
-export default function Home() {
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Toaster, withNotAuth } from '@/helpers';
+import { useApiRequest } from '@/hooks';
+import { useAppDispatch } from '@/store';
+import { loginUrl } from '@/consts';
+import { login as loginAction } from '@/store/user';
+
+import logo from '@/public/img/logo.png';
+import '@/styles/all.css';
+
+const Home = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const {
+    response: loginResponse,
+    error: loginError,
+    loading: loginLoading,
+    sendRequest: sendLoginRequest,
+  } = useApiRequest({
+    endpoint: loginUrl,
+    method: 'POST',
+    data: {
+      email,
+      password,
+    },
+  });
+
+  useEffect(() => {
+    loginResponse && Toaster.success(loginResponse.message);
+    loginResponse && dispatch(loginAction(loginResponse.data));
+    loginResponse && router.push('/account');
+    setEmail('');
+    setPassword('');
+  }, [loginResponse]);
+
+  useEffect(() => {
+    loginError && Toaster.error(loginError.message);
+  }, [loginError]);
+
   return (
     <div data-ignore="used only for top most containter width">
       <div className="bg-[white] box-border flex justify-start items-stretch ">
@@ -35,13 +76,12 @@ export default function Home() {
                       </g>
                     </svg>
                   </div>
-                  {/* <p className="[font-family:Montserrat,sans-serif] text-sm font-light uppercase text-[#1e3c55] grow-0 shrink-0 basis-auto ml-4 m-0 p-0">
-                    Email
-                  </p> */}
                   <input
                     placeholder="EMAIL"
                     type="text"
                     className="w-full [font-family:Montserrat,sans-serif] text-sm font-light bg-transparent [outline:none] box-border ml-[18px] border-[none] text-[#1e3c55]"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="grow-0 shrink-0 basis-auto mt-5">
@@ -69,14 +109,22 @@ export default function Home() {
                     <input
                       placeholder="PASSWORD"
                       type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       className="w-full [font-family:Montserrat,sans-serif] text-sm font-light bg-transparent [outline:none] box-border ml-[18px] border-[none] text-[#1e3c55]"
                     />
                   </div>
                 </div>
               </div>
               <div className="flex justify-start items-stretch flex-col w-[100.00%] box-border mt-[43px]">
-                <button className="rounded bg-[#1e3c55] shadow-[0px_4px_4px_rgba(0,0,0,0.30)] [font-family:Montserrat,sans-serif] text-base font-semibold uppercase text-[white] cursor-pointer py-3 block box-border grow-0 shrink-0 basis-auto border-[none]">
-                  login
+                <button
+                  className="rounded bg-[#1e3c55] shadow-[0px_4px_4px_rgba(0,0,0,0.30)] [font-family:Montserrat,sans-serif] text-base font-semibold uppercase text-[white] cursor-pointer py-3 block box-border grow-0 shrink-0 basis-auto border-[none]"
+                  disabled={email === '' || password === '' || loginLoading}
+                  onClick={() => {
+                    sendLoginRequest();
+                  }}
+                >
+                  {loginLoading ? 'Logging in...' : 'Login'}
                 </button>
                 <p className="[font-family:Montserrat,sans-serif] text-base font-medium text-[#1e3c55] self-end grow-0 shrink-0 basis-auto mt-[11px] m-0 p-0">
                   Forgot password?
@@ -88,4 +136,6 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+export default withNotAuth(Home);

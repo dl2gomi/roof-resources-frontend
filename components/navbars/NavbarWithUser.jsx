@@ -2,19 +2,54 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAppSelector } from '@/store';
 
 import logo from '@/public/img/logo.png';
 import menusvg from '@/public/img/menu.svg';
 import closesvg from '@/public/img/close.svg';
-import avatar from '@/public/img/avatar-default.png';
+import avatarDefault from '@/public/img/avatar-default.png';
+import { useApiRequest } from '@/hooks';
+import { avatarUrl } from '@/consts';
 
 const NavbarWithUser = () => {
+  const userState = useAppSelector((state) => state.user);
+
   const [isOpen, setIsOpen] = useState(false);
+  const [avatar, setAvatar] = useState(avatarDefault);
+
+  const {
+    response: avatarResponse,
+    error: avatarError,
+    loading: avataroading,
+    sendRequest: sendAvatarRequest,
+  } = useApiRequest({
+    endpoint: avatarUrl,
+    method: 'GET',
+    headers: {
+      authorization: `Bearer ${userState.token}`,
+    },
+  });
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  useEffect(() => {
+    userState.token && sendAvatarRequest && sendAvatarRequest();
+  }, [userState]);
+
+  useEffect(() => {
+    if (avatarResponse && avatarResponse.data.image) {
+      setAvatar(avatarResponse.data.image);
+    }
+  }, [avatarResponse]);
+
+  useEffect(() => {
+    if (avatarError) {
+      setAvatar(avatarError.message);
+    }
+  }, [avatarError]);
 
   return (
     <nav className="h-[100px] flex w-full items-center ">
@@ -26,6 +61,13 @@ const NavbarWithUser = () => {
         </div>
 
         <div className="hidden md:flex space-x-4">
+          {userState && userState.role === 'super' && (
+            <Link href="/branches">
+              <div className="[font-family:'Open_Sans',sans-serif] text-sm font-bold tracking-[0.75px] leading-4 uppercase text-[#1e3c55] m-0 p-0">
+                Branches
+              </div>
+            </Link>
+          )}
           <Link href="/proposals">
             <div className="[font-family:'Open_Sans',sans-serif] text-sm font-bold tracking-[0.75px] leading-4 uppercase text-[#1e3c55] m-0 p-0">
               Proposals
@@ -36,14 +78,26 @@ const NavbarWithUser = () => {
               Invoices
             </div>
           </Link>
+          {userState && (userState.role === 'super' || userState.role === 'admin') && (
+            <Link href="/users">
+              <div className="[font-family:'Open_Sans',sans-serif] text-sm font-bold tracking-[0.75px] leading-4 uppercase text-[#1e3c55] m-0 p-0">
+                Users
+              </div>
+            </Link>
+          )}
         </div>
 
         <Link
           className="hidden md:flex space-x-4 mx-4 border-[#242760] border-[2px] border-solid"
-          style={{ borderRadius: '50%' }}
+          style={{ borderRadius: '50%', width: '48px', height: '48px' }}
           href="/account"
         >
-          <Image src={avatar} alt="Profile avatar" height={48} />
+          <Image
+            className="relative"
+            src={avatar}
+            alt="Profile avatar"
+            style={{ borderRadius: '50%', width: '100%', height: '100%' }}
+          />
         </Link>
 
         {/* Mobile Menu Button */}
@@ -65,6 +119,13 @@ const NavbarWithUser = () => {
                   Home
                 </div>
               </Link>
+              {userState && userState.role === 'super' && (
+                <Link href="/branches">
+                  <div className="[font-family:'Open_Sans',sans-serif] text-lg font-bold tracking-[0.75px] leading-4 uppercase text-[#1e3c55] my-6">
+                    Branches
+                  </div>
+                </Link>
+              )}
               <Link href="/proposals">
                 <div className="[font-family:'Open_Sans',sans-serif] text-lg font-bold tracking-[0.75px] leading-4 uppercase text-[#1e3c55] my-6">
                   Proposals
@@ -75,6 +136,13 @@ const NavbarWithUser = () => {
                   Invoices
                 </div>
               </Link>
+              {userState && (userState.role === 'super' || userState.role === 'admin') && (
+                <Link href="/users">
+                  <div className="[font-family:'Open_Sans',sans-serif] text-lg font-bold tracking-[0.75px] leading-4 uppercase text-[#1e3c55] my-6">
+                    Users
+                  </div>
+                </Link>
+              )}
               <Link href="/account">
                 <div className="[font-family:'Open_Sans',sans-serif] text-lg font-bold tracking-[0.75px] leading-4 uppercase text-[#1e3c55] my-6">
                   Account
