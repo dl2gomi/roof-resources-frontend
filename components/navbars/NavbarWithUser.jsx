@@ -96,6 +96,8 @@ const NavbarWithUser = () => {
             className="relative"
             src={avatar}
             alt="Profile avatar"
+            width={20}
+            height={20}
             style={{ borderRadius: '50%', width: '100%', height: '100%' }}
           />
         </Link>

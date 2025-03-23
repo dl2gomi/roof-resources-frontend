@@ -18,11 +18,12 @@ const OverlayModal = ({ isOpen, onClose, title, children }) => {
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-[#000000a0] bg-opacity-50"
+      className="fixed inset-0 flex items-center justify-center bg-[#000000a0] bg-opacity-50 p-4"
       onClick={onClose} // Close on clicking outside
     >
       <div
-        className="bg-white rounded-lg p-6 w-96 shadow-lg relative"
+        className="bg-white rounded-lg p-6 min-w-96 shadow-lg relative overflow-y-auto"
+        style={{ maxHeight: '96%' }}
         onClick={(e) => e.stopPropagation()} // Prevent closing on modal click
       >
         {/* Close Button */}

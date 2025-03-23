@@ -17,6 +17,8 @@ export const branchUpdateUrl = `${apiBaseUrl}/branches/`;
 export const proposalListUrl = `${apiBaseUrl}/proposals/`;
 export const proposalCreateUrl = `${apiBaseUrl}/proposals/`;
 export const proposalUpdateUrl = `${apiBaseUrl}/proposals/`;
+export const proposalShowUrl = `${apiBaseUrl}/proposals/`;
+export const proposalMailUrl = `${apiBaseUrl}/proposals/mail`;
 
 // invoice
 export const invoiceListUrl = `${apiBaseUrl}/invoices/`;
