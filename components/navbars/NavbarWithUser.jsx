@@ -11,6 +11,7 @@ import closesvg from '@/public/img/close.svg';
 import avatarDefault from '@/public/img/avatar-default.png';
 import { useApiRequest } from '@/hooks';
 import { avatarUrl } from '@/consts';
+import { toast } from 'react-toastify';
 
 const NavbarWithUser = () => {
   const userState = useAppSelector((state) => state.user);
@@ -47,7 +48,7 @@ const NavbarWithUser = () => {
 
   useEffect(() => {
     if (avatarError) {
-      setAvatar(avatarError.message);
+      setAvatar(avatarDefault);
     }
   }, [avatarError]);
 

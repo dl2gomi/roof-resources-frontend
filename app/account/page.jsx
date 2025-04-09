@@ -151,7 +151,7 @@ const Account = () => {
 
   useEffect(() => {
     if (avatarError) {
-      setAvatar(avatarError.message);
+      setAvatar(avatarDefault);
     }
   }, [avatarError]);
 

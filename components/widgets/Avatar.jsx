@@ -6,6 +6,7 @@ import { Toaster } from '@/helpers';
 import { useApiRequest } from '@/hooks';
 import { avatarUrl } from '@/consts';
 import { useAppSelector } from '@/store';
+import avatarDefault from '@/public/img/avatar-default.png';
 
 const Avatar = ({ avatar }) => {
   const userState = useAppSelector((state) => state.user);
@@ -76,7 +77,7 @@ const Avatar = ({ avatar }) => {
       style={{ width: '160px', height: '160px' }}
     >
       <Image
-        src={selectedImage || avatar} // Show selected image or default
+        src={selectedImage || avatar || avatarDefault} // Show selected image or default
         className="object-cover box-border border-[none]"
         alt="avatar"
         layout="fill"
